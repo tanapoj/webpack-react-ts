@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React</title>
+</head>
+<body>
+
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<link rel="mask-icon" type=""
+      href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg"
+      color="#111">
+<link rel="shortcut icon" type="image/x-icon"
+      href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<style>
+    html, body {
+        height: 100%;
+        color: #000000;
+        background: #ffffff;
+    }
+
+    h1 {
+        margin: 20px 0 15px 0;
+    }
+
+    #main {
+        width: 600px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    ul > li:hover {
+        background-color: #F5F5F5;
+    }
+
+    .form-inline .form-control {
+        width: 50%;
+        margin-left: 80px;
+    }
+
+    .done {
+        color: #e8d7c3;
+        text-decoration: line-through;
+    }
+
+    .undone {
+        color: #3f3937;
+    }
+
+    .icon {
+        margin: 6px 10px 6px 0;
+    }
+
+</style>
+
+<div id="app"></div>
+
+<script type="text/babel">
+    /*
+        Todo app structure
+
+        TodoApp
+            - TodoHeader
+            - TodoList
+            - TodoListItem #1
+                - TodoListItem #2
+                  ...
+                - TodoListItem #N
+            - TodoForm
+        */
+
+    let todoItems = [
+        {index: 1, value: "Learn React", done: false},
+        {index: 2, value: "Practice Kotlin", done: true},
+        {index: 3, value: "buy iPhone 12", done: true}
+    ];
+
+    class TodoList extends React.Component {
+        render() {
+            let items = this.props.items.map((item, index) => (
+                <TodoListItem
+                    key={index}
+                    item={item}
+                    index={index}
+                    removeItem={this.props.removeItem}
+                    markTodoDone={this.props.markTodoDone}
+                />
+            ));
+            return (
+                <ul className="list-group">
+                    {items}
+                </ul>
+            );
+        }
+    }
+
+    class TodoListItem extends React.Component {
+        constructor(props) {
+            super(props);
+        }
+
+        onClickClose = () => {
+            let index = parseInt(this.props.index);
+            this.props.removeItem(index);
+        }
+
+        onClickDone = () => {
+            let index = parseInt(this.props.index);
+            this.props.markTodoDone(index);
+        }
+
+        render() {
+            let todoClass = this.props.item.done ? "done" : "undone";
+            return (
+                <li className="list-group-item ">
+                    <div className={todoClass}>
+                        <span className="glyphicon glyphicon-ok icon" aria-hidden="true"
+                              onClick={this.onClickDone}/>
+                        {this.props.item.value}
+                        <button type="button" className="close" onClick={this.onClickClose}>&times;</button>
+                    </div>
+                </li>
+            );
+        }
+    }
+
+    class TodoForm extends React.Component {
+        constructor(props) {
+            super(props);
+        }
+
+        componentDidMount() {
+            this.refs.itemName.focus();
+        }
+
+        onSubmit = (event) => {
+            event.preventDefault();
+            let newItemValue = this.refs.itemName.value;
+
+            if (newItemValue) {
+                this.props.addItem({newItemValue});
+                this.refs.form.reset();
+            }
+        }
+
+        render() {
+            return (
+                <form ref="form" onSubmit={this.onSubmit} className="form-inline">
+                    <input type="text" ref="itemName" className="form-control" placeholder="add a new todo..."/>
+                    <button type="submit" className="btn btn-default">Add</button>
+                </form>
+            );
+        }
+    }
+
+    class TodoHeader extends React.Component {
+        render() {
+            return <h1>Todo list</h1>;
+        }
+    }
+
+    class TodoApp extends React.Component {
+        constructor(props) {
+            super(props);
+            this.addItem = this.addItem.bind(this);
+            this.removeItem = this.removeItem.bind(this);
+            this.markTodoDone = this.markTodoDone.bind(this);
+            this.state = {todoItems: todoItems};
+        }
+
+        addItem(todoItem) {
+            todoItems.unshift({
+                index: todoItems.length + 1,
+                value: todoItem.newItemValue,
+                done: false
+            });
+            this.setState({todoItems: todoItems});
+        }
+
+        removeItem(itemIndex) {
+            todoItems.splice(itemIndex, 1);
+            this.setState({todoItems: todoItems});
+        }
+
+        markTodoDone(itemIndex) {
+            let todo = todoItems[itemIndex];
+            todoItems.splice(itemIndex, 1);
+            todo.done = !todo.done;
+            todo.done ? todoItems.push(todo) : todoItems.unshift(todo);
+            this.setState({todoItems: todoItems});
+        }
+
+        render() {
+            return (
+                <div id="main">
+                    <TodoHeader/>
+                    <TodoList items={this.props.initItems} removeItem={this.removeItem}
+                              markTodoDone={this.markTodoDone}/>
+                    <TodoForm addItem={this.addItem}/>
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React</title>
+</head>
+<body>
+
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+    // :::::::::: Virtual DOM ::::::::::
+    /*const currentTime = new Date().toLocaleTimeString()
+    const element = <div>The Time is {currentTime}</div>
+    ReactDOM.render(element, document.getElementById("root"))
+    setInterval(() => {
+        const currentTime = new Date().toLocaleTimeString()
+        const element = (
+            <div>
+                The Time is {currentTime}<br/>
+               <input value={currentTime}/><br/>
+               <input value={currentTime}/><br/>
+           </div>
+        )
+        ReactDOM.render(element, document.getElementById("root"))
+    }, 1000)*/
+
+    //:::::::::: Condition Render ::::::::::
+    /*const Element = ({primary, secondary}) => {
+        return (
+            <>
+                <div>
+                    {primary ? <h2>{primary}</h2> : <span>No Message</span>}
+                </div>
+                {secondary ||
+                <div>
+                    {secondary}
+                </div>
+                }
+            </>
+        )
+    }
+    let element = <Element primary="This is One" secondary="and this is two"/>
+    ReactDOM.render(element, document.getElementById("root"))*/
+
+    // :::::::::: Event Handler ::::::::::
+    /*let counter = 0
+
+    function inc() {
+        counter++
+        render()
+    }
+
+    function dec() {
+        counter--
+        render()
+    }
+
+    function render() {
+        ReactDOM.render(<Element counter={counter}/>, document.getElementById("root"))
+    }
+
+    const Element = ({counter}) => (
+        <div>
+            <button onClick={inc}>increment</button>
+            <button onClick={dec}>decrement</button>
+            <div>{counter}</div>
+        </div>
+    )
+
+    render()*/
+    /*class Element extends React.Component {
+        state = {
+            counter: 0
+        }
+
+        inc = () => {
+            this.setState({
+                counter: this.state.counter + 1
+            })
+        }
+
+        dec = () => {
+            this.setState({
+                counter: this.state.counter - 1
+            })
+        }
+
+        render() {
+            return (
+                <div>
+                    <button onClick={this.inc}>increment</button>
+                    <button onClick={this.dec}>decrement</button>
+                    <div>{this.state.counter}</div>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<Element/>, document.getElementById("root"))*/
+
+
+    // :::::::::: Life Cycle ::::::::::
+
+
+    // :::::::::: Refs ::::::::::
+    /*class Inner extends React.Component {
+
+        componentDidMount() {
+            console.log(this.rootElement)
+        }
+
+        setName = () => {
+            console.log(this.props)
+            this.props.setName("inner")
+        }
+
+        render() {
+            return (
+                <div ref={n => this.rootElement = n} className="inner">
+                    <button onClick={this.setName}>set name to INNER</button>
+                    <p>{this.props.num}</p>
+                    <div {...this.props}/>
+                </div>
+            )
+        }
+    }
+
+    class Outer extends React.Component {
+        state = {
+            num: 0,
+            name: "outer"
+        }
+
+        incNum = () => {
+            this.setState({
+                num: this.state.num + 1
+            })
+        }
+
+        setName = (name) => {
+            this.setState({
+                name
+            })
+        }
+
+        render() {
+            return (
+                <div>
+                    <h1>This is Outer</h1>
+                    <button onClick={() => this.setName("outer")}>set name to OUTER</button>
+                    <button onClick={this.incNum}>inc num</button>
+                    <Inner setName={this.setName} num={this.state.num}>
+                        <h2>This is h2</h2>
+                        <p>and this is content name is {this.state.name}</p>
+                    </Inner>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<Outer/>, document.getElementById("root"))*/
+
+
+    // const Element = (props) => (
+    //     <div>
+    //         I am {props.first} {props.second} {props.age}
+    //     </div>
+    // )
+    //
+    // let element = <Element first="Harry" second="potter" age="15"/>
+    //
+    // ReactDOM.render(element, document.getElementById("root"))
+
+</script>
+
+</body>
+</html>
