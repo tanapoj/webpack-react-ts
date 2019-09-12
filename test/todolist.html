@@ -139,23 +139,24 @@
         }
 
         componentDidMount() {
-            this.refs.itemName.focus();
+            this.itemName.focus();
         }
 
         onSubmit = (event) => {
             event.preventDefault();
-            let newItemValue = this.refs.itemName.value;
+            let newItemValue = this.itemName.value;
 
             if (newItemValue) {
                 this.props.addItem({newItemValue});
-                this.refs.form.reset();
+                this.form.reset();
             }
         }
 
         render() {
             return (
-                <form ref="form" onSubmit={this.onSubmit} className="form-inline">
-                    <input type="text" ref="itemName" className="form-control" placeholder="add a new todo..."/>
+                <form ref={n => this.form = n} onSubmit={this.onSubmit} className="form-inline">
+                    <input type="text" ref={n => this.itemName = n} className="form-control"
+                           placeholder="add a new todo..."/>
                     <button type="submit" className="btn btn-default">Add</button>
                 </form>
             );
@@ -169,29 +170,24 @@
     }
 
     class TodoApp extends React.Component {
-        constructor(props) {
-            super(props);
-            this.addItem = this.addItem.bind(this);
-            this.removeItem = this.removeItem.bind(this);
-            this.markTodoDone = this.markTodoDone.bind(this);
-            this.state = {todoItems: todoItems};
-        }
 
-        addItem(todoItem) {
+        state = {todoItems: todoItems}
+
+        addItem = (todoItem) => {
             todoItems.unshift({
                 index: todoItems.length + 1,
                 value: todoItem.newItemValue,
-                done: false
+                done:  false
             });
             this.setState({todoItems: todoItems});
         }
 
-        removeItem(itemIndex) {
+        removeItem = (itemIndex) => {
             todoItems.splice(itemIndex, 1);
             this.setState({todoItems: todoItems});
         }
 
-        markTodoDone(itemIndex) {
+        markTodoDone = (itemIndex) => {
             let todo = todoItems[itemIndex];
             todoItems.splice(itemIndex, 1);
             todo.done = !todo.done;
