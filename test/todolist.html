@@ -123,9 +123,8 @@
             return (
                 <li className="list-group-item ">
                     <div className={todoClass}>
-                        <span className="glyphicon glyphicon-ok icon" aria-hidden="true"
-                              onClick={this.onClickDone}/>
-                        {this.props.item.value}
+                        <span className="glyphicon glyphicon-ok icon" aria-hidden="true" onClick={this.onClickDone}/>
+                        <span class="content">{this.props.item.value}</span>
                         <button type="button" className="close" onClick={this.onClickClose}>&times;</button>
                     </div>
                 </li>
@@ -159,7 +158,8 @@
         render() {
             return (
                 <form ref={n => this.form = n} onSubmit={this.onSubmit} className="form-inline">
-                    <input type="text" ref={n => this.itemName = n} className="form-control" placeholder="add a new todo..."/>
+                    <input type="text" ref={n => this.itemName = n} className="form-control"
+                           placeholder="add a new todo..."/>
                     <button type="submit" className="btn btn-default">Add</button>
                 </form>
             );
@@ -167,8 +167,18 @@
     }
 
     class TodoHeader extends React.Component {
+
+        constructor(props) {
+            super(props);
+        }
+
         render() {
-            return <h1>Todo list</h1>;
+            return (
+                <>
+                    <h1>Todo list</h1>
+                    <p>{this.props.items.filter(item => !item.done).length} / {this.props.items.length}</p>
+                </>
+            )
         }
     }
 
@@ -209,7 +219,7 @@
         render() {
             return (
                 <div id="main">
-                    <TodoHeader/>
+                    <TodoHeader items={this.state.todoItems}/>
                     <TodoList items={this.state.todoItems}
                               removeItem={this.removeItem}
                               markTodoDone={this.markTodoDone}/>

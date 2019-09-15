@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React</title>
+</head>
+<body>
+
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+
+<link rel="mask-icon" type=""
+      href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg"
+      color="#111">
+<link rel="shortcut icon" type="image/x-icon"
+      href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<style>
+    html, body {
+        height: 100%;
+        color: #000000;
+        background: #ffffff;
+    }
+
+    h1 {
+        margin: 20px 0 15px 0;
+    }
+
+    #main {
+        width: 600px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    ul > li:hover {
+        background-color: #F5F5F5;
+    }
+
+    .form-inline .form-control {
+        width: 50%;
+        margin-left: 80px;
+    }
+
+    .done {
+        color: #e8d7c3;
+        text-decoration: line-through;
+    }
+
+    .undone {
+        color: #3f3937;
+    }
+
+    .icon {
+        margin: 6px 10px 6px 0;
+    }
+
+</style>
+
+<script type="text/html" id="template">
+    <li class="list-group-item ">
+        <div class="undone">
+            <span class="glyphicon glyphicon-ok icon" aria-hidden="true"></span>
+            <span class="content"></span>
+            <button type="button" class="close">×</button>
+        </div>
+    </li>
+</script>
+
+<div id="app">
+    <div id="main"><h1>Todo list</h1>
+        <ul class="list-group">
+        </ul>
+        <form class="form-inline">
+            <input type="text" class="form-control" placeholder="add a new todo...">
+            <button type="submit" class="btn btn-default">Add</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let todoItems = [
+        {index: 1, value: "Learn React", done: false},
+        {index: 2, value: "Practice Kotlin", done: true},
+        {index: 3, value: "buy iPhone 12", done: true}
+    ];
+
+    $(function () {
+
+        let controller = {
+            todos: [],
+            view: {},
+            start() {
+                this.view.bind(this)
+            },
+            setView(view) {
+                this.view = view
+            },
+            addItem(content) {
+                let todo = {
+                    value: content,
+                    done: false,
+                }
+                this.todos.unshift(todo)
+                this.view.setInputValue("")
+                this.view.insertItem(0, content, false)
+            },
+            toggleItemStatus(index) {
+                this.todos[index].done = !this.todos[index].done
+                this.view.setItemStatus(index, this.todos[index].done)
+            },
+            removeItem(index) {
+                this.todos.slice(index, 1)
+                this.view.removeItem(index)
+            },
+        }
+
+        let app = $("#app")
+        let form = app.find("form")
+        let input = form.find("input")
+        let ul = app.find(".list-group")
+        let template = () => $($("#template").html()).clone()
+
+        let view = {
+            bind(controller) {
+                form.on("submit", function (event) {
+                    event.preventDefault()
+                    let content = input.val()
+                    controller.addItem(content)
+                })
+                ul.on("click", ".icon", function () {
+                    let li = $(this).closest("li")
+                    let idx = li.index()
+                    controller.toggleItemStatus(idx)
+                })
+                ul.on("click", ".close", function () {
+                    let li = $(this).closest("li")
+                    let idx = li.index()
+                    controller.removeItem(idx)
+                })
+            },
+            setInputValue(value) {
+                input.val(value)
+            },
+            setItemStatus(index, done = true) {
+                console.log(index, done)
+                let li = ul.children().eq(index)
+                li.children().removeClass("done undone")
+                li.children().addClass(done ? "done" : "undone")
+            },
+            insertItem(index, content, done) {
+                let li = template()
+                li.find(".content").text(content)
+                li.children().removeClass("done undone")
+                li.children().addClass(done ? "done" : "undone")
+                if (index == 0) {
+                    ul.prepend(li)
+                } else {
+                    li.insertBefore(ul.children().eq(index))
+                }
+            },
+            removeItem(index) {
+                ul.children().eq(index).remove()
+            },
+        }
+
+        controller.setView(view)
+        controller.start()
+
+        todoItems.forEach((todo, i) => {
+            controller.addItem(todo.value)
+            if (todo.done) controller.toggleItemStatus(i)
+        })
+
+    })
+</script>
+
+</body>
+</html>
