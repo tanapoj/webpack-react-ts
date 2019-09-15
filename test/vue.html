@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="https://unpkg.com/vue"></script>
+
+<div id="app">
+
+    <p>{{ message }}</p>
+
+    <button v-on:click="reverseMessage">Reverse Message</button>
+
+    <ol>
+        <li v-for="todo in todos">
+            {{ todo.text }}
+        </li>
+    </ol>
+</div>
+
+<script>
+    let app = new Vue({
+        el:   '#app',
+        data: {
+            message: 'Hello Vue.js!',
+            todos:   [
+                {text: 'Learn JavaScript'},
+                {text: 'Learn Vue'},
+                {text: 'Build something awesome'}
+            ]
+        },
+        methods: {
+            reverseMessage: function () {
+                this.message = this.message.split('').reverse().join('')
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

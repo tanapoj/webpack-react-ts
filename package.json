@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx webpack --watch"
+    "dev": "npx webpack --watch"
   },
   "author": "",
   "license": "ISC",
