@@ -1,30 +1,19 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import {Hello} from "./components/Hello";
-import {useState} from "react"
+import {createStore} from "redux"
+import {Provider} from "react-redux"
+import reducer from "./store/reducer"
 
-function Counter() {
-    const [count, setCount] = useState(0)
-    return (
-        <>
-            <button onClick={() => setCount(count + 1)}>increment</button>
-            <div>
-                count is {count}
-            </div>
-        </>
-    )
-}
+const store = createStore(reducer)
 
-const ele = (
-    <>
-        <Hello compiler="TypeScript" framework="React"/>
-        <hr/>
-        <Counter/>
-    </>
+const app = (
+    <Provider store={store}>
+        Test
+    </Provider>
 )
 
 ReactDOM.render(
-    ele,
-    document.getElementById("example")
+    app,
+    document.getElementById("root")
 );
